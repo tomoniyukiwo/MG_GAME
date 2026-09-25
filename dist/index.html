@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="仕入れ・生産・販売・決算を8期で体験する、1人用の経営シミュレーションゲーム。">
+  <meta name="theme-color" content="#0c1b2a">
+  <title>BOARDROOM 8｜経営シミュレーション</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230c1b2a'/%3E%3Cpath d='M15 45V30h8v15m6 0V20h8v25m6 0V11h8v34' fill='none' stroke='%23f0bd4f' stroke-width='6'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">B8</span>
+        <div><strong>BOARDROOM 8</strong><span>経営シミュレーション</span></div>
+      </div>
+      <div class="header-actions">
+        <button class="text-button" id="helpButton" type="button">遊び方</button>
+        <button class="text-button danger" id="resetButton" type="button">最初から</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="round-banner" aria-labelledby="roundTitle">
+        <div>
+          <p class="eyebrow">MANAGEMENT PERIOD</p>
+          <h1 id="roundTitle">第1期 / 全8期</h1>
+          <p id="roundMessage">需要を読み、今期の経営計画を決めてください。</p>
+        </div>
+        <div class="market-card">
+          <span>市場景気</span>
+          <strong id="marketLabel">標準</strong>
+          <div class="market-meter" aria-hidden="true"><i id="marketMeter"></i></div>
+          <small id="marketHint">基準需要 24個</small>
+        </div>
+      </section>
+
+      <section class="kpi-grid" aria-label="会社の状態">
+        <article class="kpi"><span>現金</span><strong id="cashValue">—</strong><small id="cashDelta">開始資金</small></article>
+        <article class="kpi"><span>製品在庫</span><strong id="productValue">—</strong><small id="materialValue">原材料 —</small></article>
+        <article class="kpi"><span>生産能力</span><strong id="capacityValue">—</strong><small id="staffValue">社員 —</small></article>
+        <article class="kpi accent"><span>累計利益</span><strong id="profitValue">—</strong><small>目標：黒字を維持</small></article>
+      </section>
+
+      <div class="workspace">
+        <section class="decision-panel" aria-labelledby="decisionTitle">
+          <div class="section-heading">
+            <div><p class="eyebrow">YOUR DECISIONS</p><h2 id="decisionTitle">今期の意思決定</h2></div>
+            <span class="budget" id="plannedCost">予定支出 0万円</span>
+          </div>
+
+          <div class="control-list">
+            <label class="control-row" for="buyMaterials">
+              <span><b>原材料を仕入れる</b><small>1個 3万円。製品1個につき1個必要</small></span>
+              <span class="stepper"><button type="button" data-step="buyMaterials" data-delta="-1" aria-label="仕入れを1個減らす">−</button><input id="buyMaterials" type="number" min="0" max="80" value="10"><button type="button" data-step="buyMaterials" data-delta="1" aria-label="仕入れを1個増やす">＋</button><em>個</em></span>
+            </label>
+            <label class="control-row" for="produceUnits">
+              <span><b>製品を生産する</b><small>加工費 2万円。在庫と能力の範囲内</small></span>
+              <span class="stepper"><button type="button" data-step="produceUnits" data-delta="-1" aria-label="生産を1個減らす">−</button><input id="produceUnits" type="number" min="0" max="80" value="15"><button type="button" data-step="produceUnits" data-delta="1" aria-label="生産を1個増やす">＋</button><em>個</em></span>
+            </label>
+            <label class="control-row" for="salePrice">
+              <span><b>販売価格</b><small>高いほど利益率は上がるが、需要は減少</small></span>
+              <span class="stepper"><button type="button" data-step="salePrice" data-delta="-1" aria-label="価格を1万円下げる">−</button><input id="salePrice" type="number" min="6" max="18" value="10"><button type="button" data-step="salePrice" data-delta="1" aria-label="価格を1万円上げる">＋</button><em>万円</em></span>
+            </label>
+            <label class="control-row" for="adSpend">
+              <span><b>広告費</b><small>1万円ごとに需要を約0.8個押し上げる</small></span>
+              <span class="stepper"><button type="button" data-step="adSpend" data-delta="-1" aria-label="広告費を1万円減らす">−</button><input id="adSpend" type="number" min="0" max="30" value="4"><button type="button" data-step="adSpend" data-delta="1" aria-label="広告費を1万円増やす">＋</button><em>万円</em></span>
+            </label>
+          </div>
+
+          <div class="upgrade-grid">
+            <button class="upgrade" id="hireButton" type="button"><span>社員を1人採用</span><strong>15万円</strong><small>生産能力 +5 / 固定費 +4</small></button>
+            <button class="upgrade" id="machineButton" type="button"><span>設備を増設</span><strong>35万円</strong><small>生産能力 +10 / 固定費 +3</small></button>
+          </div>
+
+          <div class="forecast" id="forecast" aria-live="polite"></div>
+          <button class="primary-button" id="executeButton" type="button">この計画で第1期を実行</button>
+          <p class="validation" id="validationMessage" role="alert"></p>
+        </section>
+
+        <aside class="ledger-panel" aria-labelledby="ledgerTitle">
+          <div class="section-heading compact"><div><p class="eyebrow">LEDGER</p><h2 id="ledgerTitle">経営記録</h2></div></div>
+          <div class="empty-ledger" id="emptyLedger"><span>01</span><p>最初の決算後に、売上と利益がここに記録されます。</p></div>
+          <div class="table-wrap" id="ledgerWrap" hidden>
+            <table>
+              <thead><tr><th>期</th><th>売上</th><th>利益</th><th>現金</th></tr></thead>
+              <tbody id="ledgerBody"></tbody>
+            </table>
+          </div>
+          <div class="tip-card"><span>経営のヒント</span><p id="tipText">在庫を増やしすぎると現金が減ります。市場に合わせて少しずつ生産しましょう。</p></div>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <dialog id="resultDialog" class="modal">
+    <div class="modal-top"><span class="modal-kicker">PERIOD REPORT</span><button type="button" class="icon-button" data-close="resultDialog" aria-label="閉じる">×</button></div>
+    <h2 id="resultTitle">第1期 決算</h2>
+    <div class="event-pill" id="eventPill">市場イベント</div>
+    <div class="result-grid" id="resultGrid"></div>
+    <p class="result-note" id="resultNote"></p>
+    <button class="primary-button" type="button" data-close="resultDialog">次の経営計画へ</button>
+  </dialog>
+
+  <dialog id="helpDialog" class="modal help-modal">
+    <div class="modal-top"><span class="modal-kicker">HOW TO PLAY</span><button type="button" class="icon-button" data-close="helpDialog" aria-label="閉じる">×</button></div>
+    <h2>会社を8期、黒字で経営しよう</h2>
+    <ol>
+      <li><b>仕入れと生産</b><span>原材料を買い、生産能力の範囲で製品にします。</span></li>
+      <li><b>価格と広告</b><span>安値や広告で販売数を伸ばせますが、利益率とのバランスが重要です。</span></li>
+      <li><b>決算</b><span>毎期、固定費と在庫保管費が発生します。現金がマイナスになると倒産です。</span></li>
+      <li><b>勝敗</b><span>8期終了時の自己資本（現金＋在庫価値）が会社の最終評価です。</span></li>
+    </ol>
+    <p class="disclaimer">経営研修の考え方を参考にした独自の学習ゲームです。特定の公式MGを再現するものではありません。</p>
+    <button class="primary-button" type="button" data-close="helpDialog">ゲームを始める</button>
+  </dialog>
+
+  <dialog id="gameOverDialog" class="modal game-over">
+    <span class="modal-kicker">FINAL REPORT</span>
+    <p class="grade" id="finalGrade">A</p>
+    <h2 id="finalTitle">8期の経営、お疲れさまでした</h2>
+    <p id="finalSummary"></p>
+    <div class="final-stats" id="finalStats"></div>
+    <button class="primary-button" id="playAgainButton" type="button">もう一度挑戦</button>
+  </dialog>
+
+  <script src="./game.js"></script>
+</body>
+</html>
