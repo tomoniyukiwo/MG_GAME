@@ -2,12 +2,12 @@
 const $=id=>document.getElementById(id), C=window.GAME_CONFIG||{}, MAX_PLAYERS=6;
 const COLORS=["金","青","赤","緑","紫","橙"], AI_NAMES=["つばさ商事","みらい工業","北星会社"];
 const MARKETS=[
- {id:"sapporo",name:"札幌市場",buy:12,cap:20,demand:4},
- {id:"sendai",name:"仙台市場",buy:12,cap:20,demand:4},
- {id:"tokyo",name:"東京市場",buy:16,cap:32,demand:10},
- {id:"nagoya",name:"名古屋市場",buy:13,cap:24,demand:6},
- {id:"osaka",name:"大阪市場",buy:15,cap:28,demand:8},
- {id:"fukuoka",name:"福岡市場",buy:13,cap:24,demand:6}
+ {id:"sapporo",name:"札幌市場",buy:10,cap:40,demand:3},
+ {id:"sendai",name:"仙台市場",buy:11,cap:36,demand:4},
+ {id:"tokyo",name:"東京市場",buy:12,cap:32,demand:6},
+ {id:"nagoya",name:"名古屋市場",buy:13,cap:28,demand:9},
+ {id:"osaka",name:"大阪市場",buy:14,cap:24,demand:15},
+ {id:"fukuoka",name:"福岡市場",buy:15,cap:20,demand:20}
 ];
 const RISKS=["theft","fire","breakdown","researchSuccess","consumer","workerQuit","adSuccess"];
 let mode=null,myId=null,roomCode=null,state=null,online=null,selected=null,reportTab="summary",viewReportIndex=0,lastRiskKey="";

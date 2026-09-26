@@ -5,7 +5,7 @@
   <meta name="description" content="カードによる意思決定と入札販売を行う、複数人対応の経営シミュレーションゲーム。">
   <meta name="theme-color" content="#153c2e"><title>MARKET MAKERS｜経営戦略ゲーム</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23153c2e'/%3E%3Cpath d='M12 47h40M17 47V30h8v17m7 0V20h8v27m7 0V11' fill='none' stroke='%23e7b84c' stroke-width='5'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="./styles.css?v=20260926"><link rel="stylesheet" href="./advanced.css?v=20260926"><style>[hidden]{display:none!important}</style>
+  <link rel="stylesheet" href="./styles.css?v=20260926b"><link rel="stylesheet" href="./advanced.css?v=20260926b"><style>[hidden]{display:none!important}</style>
 </head>
 <body>
   <header class="topbar"><div class="brand"><b>MM</b><span>MARKET MAKERS<small>経営戦略ゲーム</small></span></div><div id="clock" class="clock">ゲーム設定</div><div><button class="ghost" id="reportsBtn">決算履歴</button><button class="ghost" id="rulesBtn">ルール</button><button class="ghost" id="resetBtn">退出</button></div></header>
@@ -42,5 +42,5 @@
   <dialog id="rulesDialog" class="modal rules-modal"><div class="modal-top"><span>HOW TO PLAY</span><button type="button" data-close="rulesDialog">×</button></div><h2>カードと2種類のルール</h2><ol class="rules"><li><b>カードを引く</b>：意思決定カードならルールAを1回使えます。リスクカードならイベントが即時発生します。</li><li><b>ルールB</b>：カードを引いた後から手番終了まで、資金がある限り何回でも使えます。PAC・マーチャンダイザー・市場調査は1社1回で、取得後は「取得済み」になります。</li><li><b>市場</b>：札幌・仙台・東京・名古屋・大阪・福岡の市場残量は、材料購入と商品販売で共通して減ります。</li><li><b>生産</b>：ワーカー1人につき機械1台を稼働。投入と完成はそれぞれ設備能力まで行えます。</li><li><b>販売</b>：親が市場を選び、子は同じ市場・親の数量以下で入札します。セールスマンと広告で販売上限が決まります。</li><li><b>決算</b>：期末に金利と固定費を払い、原価・付加価値・損益分岐点・PL・BSを確定します。</li></ol><p class="notice">公式教材のデザインは複製せず、公開されているルール情報とご指定の仕様をもとに独自実装しています。</p><button type="button" class="main-btn full" data-close="rulesDialog">閉じる</button></dialog>
   <dialog id="finalDialog" class="modal report"><span class="eyebrow">FINAL RESULT</span><h2>最終順位</h2><div id="finalBody"></div><button id="againBtn" class="main-btn full">トップへ戻る</button></dialog>
 
-  <script src="./firebase-config.js?v=20260926"></script><script src="./game-config.js?v=20260926"></script><script src="./advanced-game.js?v=20260926"></script>
+  <script src="./firebase-config.js?v=20260926b"></script><script src="./game-config.js?v=20260926b"></script><script src="./advanced-game.js?v=20260926b"></script>
 </body></html>
