@@ -1,7 +1,7 @@
 // 公開ルールを基準にした価格と、このゲーム固有の期末設定です（単位：万円）。
 window.GAME_CONFIG = {
   initialCash: 300,
-  decisionCardRate: 0.70,
+  decisionCardRate: 0.80,
   smallMachineCost: 100,
   attachmentCost: 30,
   largeMachineCost: 200,
