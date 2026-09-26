@@ -196,15 +196,6 @@ window.firebaseConfig = {
 };
 ```
 
-## GitHub Pagesで公開
-
-1. プロジェクト一式をGitHubリポジトリへpushします。
-2. **Settings → Pages** を開きます。
-3. Sourceを **GitHub Actions** にします。
-4. `Deploy GitHub Pages` の完了を待ちます。
-
-`.github/workflows/pages.yml` が `dist` を自動公開します。
-
 ## ファイル構成
 
 ```text
