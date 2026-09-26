@@ -2,39 +2,45 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="複数人またはAIと遊べる、入札式の経営シミュレーションゲーム。">
-  <meta name="theme-color" content="#153c2e"><title>MARKET MAKERS｜経営ゲーム</title>
+  <meta name="description" content="カードによる意思決定と入札販売を行う、複数人対応の経営シミュレーションゲーム。">
+  <meta name="theme-color" content="#153c2e"><title>MARKET MAKERS｜経営戦略ゲーム</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23153c2e'/%3E%3Cpath d='M12 47h40M17 47V30h8v17m7 0V20h8v27m7 0V11' fill='none' stroke='%23e7b84c' stroke-width='5'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./styles.css?v=20260926"><link rel="stylesheet" href="./advanced.css?v=20260926"><style>[hidden]{display:none!important}</style>
 </head>
 <body>
-  <header class="topbar"><div class="brand"><b>MM</b><span>MARKET MAKERS<small>経営シミュレーション</small></span></div><div id="clock" class="clock">第1期・1手目</div><div><button class="ghost" id="rulesBtn">ルール</button><button class="ghost" id="resetBtn">退出</button></div></header>
-
+  <header class="topbar"><div class="brand"><b>MM</b><span>MARKET MAKERS<small>経営戦略ゲーム</small></span></div><div id="clock" class="clock">ゲーム設定</div><div><button class="ghost" id="reportsBtn">決算履歴</button><button class="ghost" id="rulesBtn">ルール</button><button class="ghost" id="resetBtn">退出</button></div></header>
   <main>
-    <section id="startScreen" class="start-screen">
-      <div class="start-card"><span class="eyebrow">MANAGEMENT GAME</span><h1>会社をつくり、<br>市場で競う。</h1><p>1人1社の社長となり、材料購入・製造・投資・入札販売を繰り返します。3期終了時の自己資本で順位が決まります。</p>
-        <label class="name-field">社長名<input id="playerName" maxlength="12" placeholder="例：ねこ社長"></label>
-        <div class="mode-grid"><button id="soloBtn"><b>1人で練習</b><small>AI企業3社と対戦</small></button><button id="createBtn"><b>ルームを作成</b><small>2～6人でオンライン対戦</small></button></div>
-        <div class="join"><input id="roomCode" maxlength="6" placeholder="ルームコード"><button id="joinBtn">参加する</button></div><p id="startError" class="error"></p>
-      </div>
-    </section>
+    <section id="startScreen" class="start-screen"><div class="start-card"><span class="eyebrow">CARD-DRIVEN MANAGEMENT</span><h1>意思決定が、<br>会社を変える。</h1><p>カードを引き、材料の仕入れから生産・販売・決算までを体験します。1人対AIと最大6人のオンライン対戦に対応しています。</p>
+      <label class="name-field">社長名<input id="playerName" maxlength="12" placeholder="例：ねこ社長"></label>
+      <div class="host-settings"><label>経営する期数<select id="periodSetting"><option value="3">3期</option><option value="4">4期</option><option value="5" selected>5期</option></select></label><label>1期の手番数<select id="turnSetting"><option value="8">8手</option><option value="10" selected>10手</option><option value="12">12手</option></select></label></div>
+      <div class="mode-grid"><button id="soloBtn"><b>1人で練習</b><small>AI企業3社と対戦</small></button><button id="createBtn"><b>ルームを作成</b><small>2～6人でオンライン対戦</small></button></div>
+      <div class="join"><input id="roomCode" maxlength="6" placeholder="ルームコード"><button id="joinBtn">参加する</button></div><p id="startError" class="error"></p>
+    </div></section>
 
-    <section id="lobbyScreen" class="lobby" hidden><span class="eyebrow">ONLINE ROOM</span><h1>参加者を待っています</h1><p>ルームコード</p><button id="copyCode" class="room-code">------</button><div id="lobbyPlayers" class="lobby-players"></div><button id="startGameBtn" class="main-btn">ゲーム開始</button><p id="lobbyNote">2人以上で開始できます。</p></section>
+    <section id="lobbyScreen" class="lobby" hidden><span class="eyebrow">ONLINE ROOM</span><h1>参加者を待っています</h1><p>ルームコード</p><button id="copyCode" class="room-code">------</button><div id="lobbySettings" class="lobby-settings"></div><div id="lobbyPlayers" class="lobby-players"></div><button id="startGameBtn" class="main-btn">ゲーム開始</button><p id="lobbyNote">2人以上で開始できます。</p></section>
 
-    <section id="gameScreen" class="game" hidden>
-      <div class="market-panel panel"><div class="section-head"><div><span>SHARED MARKET</span><h1>共通市場</h1></div><p id="news">市場は平穏です。</p></div><div id="markets" class="markets"></div></div>
+    <section id="gameScreen" class="game advanced-game" hidden>
+      <div class="market-panel panel"><div class="section-head"><div><span>SIX MARKETS</span><h1>共通市場</h1></div><p id="news">カードを引いてください。</p></div><div id="markets" class="markets markets-six"></div></div>
       <aside class="companies panel"><div class="section-head"><div><span>COMPANIES</span><h2>会社順位</h2></div></div><div id="companies"></div></aside>
-      <div class="my-company panel"><div class="company-head"><div><span>YOUR COMPANY</span><h2 id="myName">あなたの会社</h2></div><strong id="myCash">300万円</strong></div><div id="resources" class="resources"></div><p id="turnMessage" class="turn-message"></p><div id="actions" class="actions">
-        <button data-action="buy"><i>01</i><b>材料購入</b><small>市場から仕入れる</small></button><button data-action="produce"><i>02</i><b>製造</b><small>材料を製品化</small></button><button data-action="sell" class="sell"><i>03</i><b>販売コンペ</b><small>全社で入札</small></button><button data-action="hire"><i>04</i><b>採用</b><small>20万円</small></button><button data-action="machine"><i>05</i><b>設備投資</b><small>30万円</small></button><button data-action="ad"><i>06</i><b>広告</b><small>競争力を強化</small></button><button data-action="research"><i>07</i><b>研究開発</b><small>品質を強化</small></button><button data-action="train"><i>08</i><b>社員教育</b><small>製造力を強化</small></button><button data-action="borrow"><i>09</i><b>銀行借入</b><small>現金＋30万円</small></button><button data-action="pass"><i>10</i><b>何もしない</b><small>資金を温存</small></button>
-      </div></div>
+      <div class="my-company panel"><div class="company-head"><div><span>YOUR COMPANY</span><h2 id="myName">あなたの会社</h2></div><strong id="myCash">300万円</strong></div><div id="resources" class="resources resources-wide"></div>
+        <div class="turn-console"><div id="cardView" class="card-view"><span>YOUR TURN</span><b>カードを引く</b><p>意思決定カード70%・リスクカード30%</p></div><div><p id="turnMessage" class="turn-message">手番を待っています。</p><button id="drawCardBtn" class="main-btn console-btn">カードを引く</button><button id="endTurnBtn" class="end-btn" hidden>手番を終了</button></div></div>
+        <section class="rule-section"><div class="rule-title"><b>ルールA</b><span>意思決定カードを引いた手番に1回</span></div><div id="ruleAActions" class="actions rule-a">
+          <button data-a="buy"><i>A1</i><b>材料購入</b><small>複数市場から購入</small></button><button data-a="machine"><i>A2</i><b>設備投資</b><small>小型・大型・アタッチメント</small></button><button data-a="production"><i>A3</i><b>投入／完成</b><small>材料→仕掛品→商品</small></button><button data-a="hire"><i>A4</i><b>採用</b><small>ワーカー／セールスマン</small></button><button data-a="ad"><i>A5</i><b>広告チップ</b><small>販売能力＋2</small></button><button data-a="research"><i>A6</i><b>研究開発</b><small>価格競争力＋2</small></button><button data-a="sell" class="sell"><i>A7</i><b>販売</b><small>親として複数市場へ</small></button>
+        </div></section>
+        <section class="rule-section rule-b-section"><div class="rule-title"><b>ルールB</b><span>カードを引いてから手番終了まで何回でも実行可能</span></div><div id="ruleBActions" class="actions rule-b">
+          <button data-b="insurance"><b>保険</b><small>5万円</small></button><button data-b="pac"><b>PAC生産性</b><small>10万円</small></button><button data-b="merch"><b>マーチャンダイザー</b><small>10万円</small></button><button data-b="marketResearch"><b>市場調査</b><small>5万円</small></button><button data-b="relocate"><b>配置転換</b><small>5万円</small></button><button data-b="sellMachine"><b>機械売却</b><small>購入価格の1/2</small></button><button data-b="borrow"><b>銀行借入</b><small>15%→10%→5%</small></button><button data-b="repay"><b>借金返済</b><small>元本を返済</small></button>
+        </div></section>
+      </div>
       <aside class="log-panel panel"><div class="section-head"><div><span>ACTIVITY</span><h2>進行記録</h2></div></div><ol id="gameLog"></ol></aside>
     </section>
   </main>
 
-  <dialog id="actionDialog" class="modal"><form id="actionForm" method="dialog"><div class="modal-top"><span>ACTION</span><button value="cancel">×</button></div><h2 id="actionTitle"></h2><p id="actionHelp"></p><label id="marketField">市場<select id="actionMarket"></select></label><label>数量<input id="actionQty" type="number" min="1" max="6" value="1"></label><p id="actionCost"></p><p id="actionError" class="error"></p><div class="modal-actions"><button value="cancel">キャンセル</button><button class="main-btn" type="submit">実行</button></div></form></dialog>
-  <dialog id="bidDialog" class="modal"><form id="bidForm" method="dialog"><div class="modal-top"><span>SALES COMPETITION</span><button value="cancel">×</button></div><h2 id="bidTitle">販売コンペ</h2><p id="bidHelp"></p><label id="bidMarketField">販売市場<select id="bidMarket"></select></label><div class="two"><label>販売数<input id="bidQty" type="number" min="1" value="1"></label><label>入札価格<input id="bidPrice" type="number" min="5" value="10"></label></div><div id="bidStatus" class="bid-status"></div><p id="bidError" class="error"></p><div class="modal-actions"><button id="skipBid" type="button">辞退</button><button class="main-btn" type="submit">入札</button></div></form></dialog>
-  <dialog id="reportDialog" class="modal report"><div class="modal-top"><span>FINANCIAL REPORT</span></div><h2 id="reportTitle"></h2><div class="tabs"><button data-tab="pl" class="active">損益</button><button data-tab="bs">資産</button><button data-tab="rank">順位</button></div><div id="reportBody"></div><button id="reportNext" class="main-btn full">次へ</button></dialog>
-  <dialog id="rulesDialog" class="modal"><div class="modal-top"><span>HOW TO PLAY</span><button data-close="rulesDialog">×</button></div><h2>1手につき1つの意思決定</h2><ol class="rules"><li>各社が順番に、仕入れ・製造・投資などを1つ実行します。</li><li>販売コンペが始まると全員が価格と数量を秘密入札します。</li><li>安値、広告力、品質の順で優先され、市場需要まで販売できます。</li><li>1期10手・全3期。固定費と利息を払い、最後に自己資本を競います。</li></ol><p class="notice">公式MGを複製せず、公開情報を参考に独自設計した学習ゲームです。</p><button class="main-btn full" data-close="rulesDialog">閉じる</button></dialog>
+  <dialog id="actionDialog" class="modal advanced-modal"><form id="actionForm"><div class="modal-top"><span id="actionKicker">ACTION</span><button id="actionClose" type="button" aria-label="閉じる">×</button></div><h2 id="actionTitle"></h2><p id="actionHelp"></p><div id="actionBody"></div><p id="actionError" class="error"></p><div class="modal-actions"><button id="actionCancel" type="button">キャンセル</button><button class="main-btn" type="submit">実行</button></div></form></dialog>
+  <dialog id="saleDialog" class="modal advanced-modal"><form id="saleForm"><div class="modal-top"><span>SALES AUCTION</span><button id="saleClose" type="button" aria-label="閉じる">×</button></div><h2 id="saleTitle">販売計画</h2><p id="saleHelp"></p><div id="saleBody"></div><p id="saleError" class="error"></p><div class="modal-actions"><button id="declineSale" type="button">辞退</button><button class="main-btn" type="submit">入札する</button></div></form></dialog>
+  <dialog id="riskDialog" class="modal risk-modal"><div class="modal-top"><span>RISK CARD</span></div><div id="riskIcon" class="risk-icon">!</div><h2 id="riskTitle"></h2><p id="riskText"></p><button id="riskClose" class="main-btn full">確認</button></dialog>
+  <dialog id="reportDialog" class="modal report advanced-report"><div class="modal-top"><span>FINANCIAL REPORT</span><button id="reportClose" hidden>×</button></div><h2 id="reportTitle"></h2><label class="report-select">表示する決算<select id="reportPeriod"></select></label><div class="tabs"><button data-tab="summary" class="active">経営指標</button><button data-tab="pl">損益計算書</button><button data-tab="bs">貸借対照表</button><button data-tab="rank">順位</button></div><div id="reportBody"></div><button id="reportNext" class="main-btn full">次へ</button></dialog>
+  <dialog id="rulesDialog" class="modal rules-modal"><div class="modal-top"><span>HOW TO PLAY</span><button type="button" data-close="rulesDialog">×</button></div><h2>カードと2種類のルール</h2><ol class="rules"><li><b>カードを引く</b>：意思決定カードならルールAを1回使えます。リスクカードならイベントが即時発生します。</li><li><b>ルールB</b>：カードを引いた後から手番終了まで、資金がある限り何回でも使えます。PAC・マーチャンダイザー・市場調査は1社1回で、取得後は「取得済み」になります。</li><li><b>市場</b>：札幌・仙台・東京・名古屋・大阪・福岡の市場残量は、材料購入と商品販売で共通して減ります。</li><li><b>生産</b>：ワーカー1人につき機械1台を稼働。投入と完成はそれぞれ設備能力まで行えます。</li><li><b>販売</b>：親が市場を選び、子は同じ市場・親の数量以下で入札します。セールスマンと広告で販売上限が決まります。</li><li><b>決算</b>：期末に金利と固定費を払い、原価・付加価値・損益分岐点・PL・BSを確定します。</li></ol><p class="notice">公式教材のデザインは複製せず、公開されているルール情報とご指定の仕様をもとに独自実装しています。</p><button type="button" class="main-btn full" data-close="rulesDialog">閉じる</button></dialog>
   <dialog id="finalDialog" class="modal report"><span class="eyebrow">FINAL RESULT</span><h2>最終順位</h2><div id="finalBody"></div><button id="againBtn" class="main-btn full">トップへ戻る</button></dialog>
-  <script type="module" src="./game.js"></script>
+
+  <script src="./firebase-config.js?v=20260926"></script><script src="./game-config.js?v=20260926"></script><script src="./advanced-game.js?v=20260926"></script>
 </body></html>

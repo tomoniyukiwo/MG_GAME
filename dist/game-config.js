@@ -1,0 +1,25 @@
+// 公開ルールを基準にした価格と、このゲーム固有の期末設定です（単位：万円）。
+window.GAME_CONFIG = {
+  initialCash: 300,
+  decisionCardRate: 0.70,
+  smallMachineCost: 100,
+  attachmentCost: 30,
+  largeMachineCost: 200,
+  workerHireCost: 5,
+  salesmanHireCost: 5,
+  workerSalary: 6,
+  salesmanSalary: 6,
+  inputCost: 2,
+  completionCost: 1,
+  adChipCost: 20,
+  researchCost: 20,
+  insuranceCost: 5,
+  pacCost: 10,
+  merchandiserCost: 10,
+  marketResearchCost: 5,
+  relocationCost: 5,
+  inventoryUnitValue: 4,
+  wipUnitValue: 2,
+  materialUnitValue: 1,
+  machineBookValueRate: 0.5
+};
